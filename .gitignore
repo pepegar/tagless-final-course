@@ -1,0 +1,6 @@
+.direnv
+.bloop
+.metals
+.bsp
+target/
+metals.sbt
