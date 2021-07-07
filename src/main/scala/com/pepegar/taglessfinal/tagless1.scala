@@ -28,7 +28,7 @@ object EmailSender {
 trait UserRepository[F[_]] {
   def retrieveUser(id: String): F[Option[User]]
 }
-object UserRepository { 
+object UserRepository {
 
   implicit val instance: UserRepository[IO] =
     new UserRepository[IO] {

@@ -4,10 +4,10 @@ import com.pepegar.taglessfinal.{EmailMessage, User}
 
 import cats.effect.IO
 
-trait EmailSender[F[_]] {
-  def sendEmail(emailMessage: EmailMessage): F[Unit]
+trait EmailSender {
+  def sendEmail(emailMessage: EmailMessage): IO[Unit]
 }
-class EmailSenderImpl() extends EmailSender[IO] {
+class EmailSenderImpl() extends EmailSender {
 
   def sendEmail(emailMessage: EmailMessage): IO[Unit] =
     IO(println(s"email sent: $emailMessage"))
@@ -22,10 +22,10 @@ class EmailSenderImpl() extends EmailSender[IO] {
 
 
 
-trait UserRepository[F[_]] {
-  def retrieveUser(id: String): F[Option[User]]
+trait UserRepository {
+  def retrieveUser(id: String): IO[Option[User]]
 }
-class UserRepositoryImpl() extends UserRepository[IO] {
+class UserRepositoryImpl() extends UserRepository {
   def retrieveUser(id: String): IO[Option[User]] =
     IO.pure(Some(User(id, "foo@email.com")))
 }
@@ -37,12 +37,12 @@ class UserRepositoryImpl() extends UserRepository[IO] {
 
 
 
-trait NotificationService[F[_]] {
-  def notifyUser(id: String, message: String): F[Unit]
+trait NotificationService {
+  def notifyUser(id: String, message: String): IO[Unit]
 }
 class NotificationServiceImpl(
   // TODO: Add dependencies
-  ) extends NotificationService[IO] {
+  ) extends NotificationService {
   // TODO: Implement together
   def notifyUser(id: String, message: String): IO[Unit] = ???
 }

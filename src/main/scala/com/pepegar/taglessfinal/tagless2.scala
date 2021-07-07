@@ -27,7 +27,7 @@ object EmailSender {
 trait UserRepository[F[_]] {
   def retrieveUser(id: String): F[Option[User]]
 }
-object UserRepository { 
+object UserRepository {
 
   implicit def instance[F[_]: Sync]: UserRepository[F] =
     new UserRepository[F] {
