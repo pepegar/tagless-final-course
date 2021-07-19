@@ -48,5 +48,25 @@ trait NotificationService[F[_]] {
   def notifyUser(id: String, message: String): F[Unit]
 }
 object NotificationService {
-  // TODO: Implement
+
+  implicit def instance(implicit
+    emailSender: EmailSender[IO],
+    userRepository: UserRepository[IO]
+  ): NotificationService[IO] =
+    new NotificationService[IO] {
+      def notifyUser(id: String, message: String): IO[Unit] = {
+        for {
+          maybeUser <- userRepository.retrieveUser(id)
+          _ <- maybeUser match {
+	          case Some(user) =>
+              val emailMessage = EmailMessage.create(to = user.email, body = message)
+              emailSender.sendEmail(emailMessage)
+	          case None =>
+              IO.raiseError(new Exception("no user with that ID"))
+          }
+        } yield ()
+
+      }
+    }
+
 }

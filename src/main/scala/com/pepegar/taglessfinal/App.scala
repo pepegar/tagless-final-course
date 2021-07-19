@@ -1,11 +1,15 @@
 package com.pepegar.taglessfinal
 
-object Main extends App {
-  println("""
-    Use the NotificationService to send a notification.
+import com.pepegar.taglessfinal.tagless1._
+import cats.effect.IOApp
+import cats.effect.IO
 
-    1. java-ish
-    2. add effects, keep subtyping
-    3. use tagless
-    """)
+object Main extends IOApp.Simple {
+
+  def run: IO[Unit] = {
+    val notificationService = implicitly[NotificationService[IO]]
+
+    notificationService.notifyUser("pepegar", "pay the thigns pepe!")
+  }
+
 }

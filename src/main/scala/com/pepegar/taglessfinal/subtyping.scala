@@ -39,8 +39,20 @@ trait NotificationService {
   def notifyUser(id: String, message: String): Unit
 }
 class NotificationServiceImpl(
-  // TODO: Add dependencies
+  emailSender: EmailSender,
+  userRepository: UserRepository
   ) extends NotificationService {
-  // TODO: Implement together
-  def notifyUser(id: String, message: String): Unit = ???
+
+  def notifyUser(id: String, message: String): Unit = {
+    val maybeUser = userRepository.retrieveUser(id)
+
+    maybeUser match {
+	    case Some(user) =>
+        val emailMessage = EmailMessage.create(to = user.email, body = message)
+
+        emailSender.sendEmail(emailMessage)
+	    case None =>
+        throw new Exception("user doesn't exist")
+    }
+  }
 }
